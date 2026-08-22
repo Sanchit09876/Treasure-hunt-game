@@ -17,18 +17,26 @@ function Game() {
   const [rows, setRows] = useState([]);
   const [rowLocked, setRowLocked] = useState(false);
   const [roundId, setRoundId] = useState(0);
-  const [betErr, setBetErr] = useState("");
+  const [err, setErr] = useState("");
+  const [activeBet, setActiveBet] = useState(0);
 
   function startGame() {
+    if(gameStatus === "playing"){
+      setErr("Finish the round or Cash Out before starting new Round!");
+      return;
+    }
     if (betAmount <= 0 ) {
-      setBetErr("Please Bet Something!")
+      setErr("Please Bet Something!")
       return;
     }
     if(betAmount > balance){
-      setBetErr("Not Enough Amount in Your balance!");
+      setErr("Not Enough Amount in Your balance!");
       return;
     }
-    setBetErr("");
+    setErr("");
+
+    setActiveBet(betAmount);
+
     setRoundId((prev) => prev + 1);
     setBalance(balance - betAmount);
     setCurrentRow(0);
@@ -50,7 +58,7 @@ function Game() {
     if (currentRow === 3) {
       const finalMultiplier = getRowMultiplier(difficulty, currentRow);
       setCurrentMultiplier(finalMultiplier);
-      setBalance(balance + betAmount * finalMultiplier);
+      setBalance(balance + activeBet * finalMultiplier);
       setGameStatus("won");
       setRowLocked(true);
       return;
@@ -63,7 +71,7 @@ function Game() {
 
   const handleCashOut = () => {
     setGameStatus("won");
-    setBalance(balance + betAmount * currentMultiplier);
+    setBalance(balance + activeBet * currentMultiplier);
   };
 
   return (
@@ -80,10 +88,10 @@ function Game() {
 
       <StatusBar balance={balance} gameStatus={gameStatus} betAmount={betAmount} currentMultiplier={currentMultiplier} />
 
-      <BetInput betAmount={betAmount} setBetAmount={setBetAmount} />
+      <BetInput betAmount={betAmount} setBetAmount={setBetAmount} gameStatus={gameStatus} />
       
-      {betErr &&
-      <p>{betErr}</p>}
+      {err &&
+      <p>{err}</p>}
 
       {rows.map((row, index) => {
         return (
