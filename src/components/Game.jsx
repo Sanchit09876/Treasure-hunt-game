@@ -14,8 +14,10 @@ function Game() {
   const [currentMultiplier, setCurrentMultiplier] = useState(1);
   const [rows, setRows] = useState([]);
   const [rowLocked, setRowLocked] = useState(false);
+  const [roundId, setRoundId] = useState(0);
 
   function startGame() {
+    setRoundId((prev) => prev + 1);
     setBalance(balance - betAmount);
     setCurrentRow(0);
     setCurrentMultiplier(1);
@@ -33,11 +35,11 @@ function Game() {
       setRowLocked(true);
       return;
     }
-    if(currentRow === 3){
-        setCurrentMultiplier(getRowMultiplier(difficulty, currentRow));
-        setGameStatus('won');
-        setRowLocked(true);
-        return;
+    if (currentRow === 3) {
+      setCurrentMultiplier(getRowMultiplier(difficulty, currentRow));
+      setGameStatus("won");
+      setRowLocked(true);
+      return;
     }
     setRowLocked(true);
     setCurrentMultiplier(getRowMultiplier(difficulty, currentRow));
@@ -45,23 +47,42 @@ function Game() {
     setRowLocked(false);
   };
 
+  const handleCashOut = () => {
+    setGameStatus("won");
+    setBalance(balance + betAmount * currentMultiplier);
+  };
 
   return (
     <div>
-      <button onClick={startGame}>Start Game</button>
+      <button
+        onClick={() => {
+          setRowLocked(false);
+          startGame();
+        }}
+      >
+        Start Game
+      </button>
       {console.log(rows)}
 
       {rows.map((row, index) => {
         return (
           <CardRow
-            key={index}
+            key={`${roundId}-${index}`}
             cards={row.cards}
             isActive={index === currentRow}
             onCardFlip={handleCardFlip}
             rowLocked={rowLocked}
+            roundId={roundId}
           />
         );
       })}
+
+      <button
+        onClick={handleCashOut}
+        disabled={gameStatus !== "playing" || currentRow === 0}
+      >
+        CashOut
+      </button>
     </div>
   );
 }
