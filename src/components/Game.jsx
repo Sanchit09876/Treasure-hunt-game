@@ -4,6 +4,8 @@ import CardRow from "./CardRow";
 
 import { generateRowCards, getRowMultiplier } from "../utils/gameLogic";
 import difficultyConfig from "../data/difficultyConfig";
+import BetInput from "./BetInput";
+import StatusBar from "./StatusBar";
 
 function Game() {
   const [balance, setBalance] = useState(100);
@@ -15,8 +17,18 @@ function Game() {
   const [rows, setRows] = useState([]);
   const [rowLocked, setRowLocked] = useState(false);
   const [roundId, setRoundId] = useState(0);
+  const [betErr, setBetErr] = useState("");
 
   function startGame() {
+    if (betAmount <= 0 ) {
+      setBetErr("Please Bet Something!")
+      return;
+    }
+    if(betAmount > balance){
+      setBetErr("Not Enough Amount in Your balance!");
+      return;
+    }
+    setBetErr("");
     setRoundId((prev) => prev + 1);
     setBalance(balance - betAmount);
     setCurrentRow(0);
@@ -36,7 +48,9 @@ function Game() {
       return;
     }
     if (currentRow === 3) {
-      setCurrentMultiplier(getRowMultiplier(difficulty, currentRow));
+      const finalMultiplier = getRowMultiplier(difficulty, currentRow);
+      setCurrentMultiplier(finalMultiplier);
+      setBalance(balance + betAmount * finalMultiplier);
       setGameStatus("won");
       setRowLocked(true);
       return;
@@ -63,6 +77,13 @@ function Game() {
         Start Game
       </button>
       {console.log(rows)}
+
+      <StatusBar balance={balance} gameStatus={gameStatus} betAmount={betAmount} currentMultiplier={currentMultiplier} />
+
+      <BetInput betAmount={betAmount} setBetAmount={setBetAmount} />
+      
+      {betErr &&
+      <p>{betErr}</p>}
 
       {rows.map((row, index) => {
         return (
