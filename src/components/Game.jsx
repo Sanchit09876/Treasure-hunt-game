@@ -54,7 +54,7 @@ function Game() {
     setCurrentMultiplier(1);
     setGameStatus("playing");
 
-    const newRows = Array.from({ length: 4 }, (_, i) => {
+    const newRows = Array.from({ length: difficultyConfig[difficulty].rowCount }, (_, i) => {
       return { cards: generateRowCards(6, difficultyConfig[difficulty].skull) };
     });
     setRows(newRows);
@@ -66,7 +66,7 @@ function Game() {
       setRowLocked(true);
       return;
     }
-    if (currentRow === 3) {
+    if (currentRow === difficultyConfig[difficulty].rowCount-1) {
       const finalMultiplier = getRowMultiplier(difficulty, currentRow);
       setCurrentMultiplier(finalMultiplier);
       setBalance(balance + activeBet * finalMultiplier);
@@ -104,7 +104,7 @@ function Game() {
       <StatusBar
         balance={balance}
         gameStatus={gameStatus}
-        betAmount={betAmount}
+        activeBet={activeBet}
         currentMultiplier={currentMultiplier}
         difficulty={difficulty}
         currentRow={currentRow}
