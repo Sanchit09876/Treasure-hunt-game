@@ -6,9 +6,10 @@ import { generateRowCards, getRowMultiplier } from "../utils/gameLogic";
 import difficultyConfig from "../data/difficultyConfig";
 import BetInput from "./BetInput";
 import StatusBar from "./StatusBar";
+import DifficultySelector from "./DifficultySelector";
 
 function Game() {
-  const [balance, setBalance] = useState(100);
+  const [balance, setBalance] = useState(100000);
   const [betAmount, setBetAmount] = useState(0);
   const [difficulty, setDifficulty] = useState("easy");
   const [gameStatus, setGameStatus] = useState("idle");
@@ -21,15 +22,15 @@ function Game() {
   const [activeBet, setActiveBet] = useState(0);
 
   function startGame() {
-    if(gameStatus === "playing"){
+    if (gameStatus === "playing") {
       setErr("Finish the round or Cash Out before starting new Round!");
       return;
     }
-    if (betAmount <= 0 ) {
-      setErr("Please Bet Something!")
+    if (betAmount <= 0) {
+      setErr("Please Bet Something!");
       return;
     }
-    if(betAmount > balance){
+    if (betAmount > balance) {
       setErr("Not Enough Amount in Your balance!");
       return;
     }
@@ -76,6 +77,11 @@ function Game() {
 
   return (
     <div>
+      <DifficultySelector
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        gameStatus={gameStatus}
+      />
       <button
         onClick={() => {
           setRowLocked(false);
@@ -86,12 +92,22 @@ function Game() {
       </button>
       {console.log(rows)}
 
-      <StatusBar balance={balance} gameStatus={gameStatus} betAmount={betAmount} currentMultiplier={currentMultiplier} />
+      <StatusBar
+        balance={balance}
+        gameStatus={gameStatus}
+        betAmount={betAmount}
+        currentMultiplier={currentMultiplier}
+        difficulty={difficulty}
+        currentRow={currentRow}
+      />
 
-      <BetInput betAmount={betAmount} setBetAmount={setBetAmount} gameStatus={gameStatus} />
-      
-      {err &&
-      <p>{err}</p>}
+      <BetInput
+        betAmount={betAmount}
+        setBetAmount={setBetAmount}
+        gameStatus={gameStatus}
+      />
+
+      {err && <p>{err}</p>}
 
       {rows.map((row, index) => {
         return (
@@ -102,6 +118,7 @@ function Game() {
             onCardFlip={handleCardFlip}
             rowLocked={rowLocked}
             roundId={roundId}
+            gameStatus={gameStatus}
           />
         );
       })}

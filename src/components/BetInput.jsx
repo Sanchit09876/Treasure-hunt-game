@@ -8,6 +8,7 @@ const BetInput = ({ betAmount, setBetAmount, gameStatus }) => {
           type="number"
           value={betAmount}
           onChange={(e) => setBetAmount(Number(e.target.value))}
+          step="0.05"
           disabled={gameStatus === "playing"}
           placeholder="Place Bets"
           className="border"

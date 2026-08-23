@@ -8,12 +8,12 @@ const difficultyConfig = {
     multipliers: [1.15, 1.2, 1.25, 1.35],
   },
   hard: {
-    skull: [3 - 4],
-    multipliers: [1.25, 1.3, 1.35, 1, 45],
+    skull: [3, 4],
+    multipliers: [1.25, 1.3, 1.35, 1.45],
   },
   extreme: {
     skull: [5, 5],
-    multiplers: [1.5, 1.75, 2, 2, 25],
+    multipliers: [1.5, 1.75, 2, 2.25],
   },
 };
 
