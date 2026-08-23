@@ -12,7 +12,7 @@ const Card = ({ type, isActive, onCardFlip, rowLocked, gameStatus }) => {
   return (
     <div>
       <div
-        className={`h-20 w-20 rounded-lg flex justify-center items-center ${flipped ? revealBg : "bg-gray-400"} transition-transform transform-[rotateY(180deg)]`}
+        className={`h-23 w-18 rounded-lg flex justify-center items-center ${flipped ? revealBg : "bg-[#13181F]"} transition-transform ${flipped ? "transform-[rotateY(180deg)]" : ""}`}
         onClick={() => {
           if (!isActive || rowLocked || gameStatus!=="playing") {
             return;
@@ -30,7 +30,7 @@ const Card = ({ type, isActive, onCardFlip, rowLocked, gameStatus }) => {
           <>
             <img
               src={questionMark}
-              className="h-15 w-12 transform-[rotateY(180deg)]"
+              className="h-15 w-12 "
             />
           </>
         )}
