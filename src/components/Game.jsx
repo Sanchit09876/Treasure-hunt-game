@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CardRow from "./CardRow";
 
 import { generateRowCards, getRowMultiplier } from "../utils/gameLogic";
@@ -9,7 +9,13 @@ import StatusBar from "./StatusBar";
 import DifficultySelector from "./DifficultySelector";
 
 function Game() {
-  const [balance, setBalance] = useState(100000);
+  const [balance, setBalance] = useState(() => {
+    const storedBalance = localStorage.getItem("treasureHuntBalance");
+    if (storedBalance === null) {
+      return 100;
+    }
+    return Number(storedBalance);
+  });
   const [betAmount, setBetAmount] = useState(0);
   const [difficulty, setDifficulty] = useState("easy");
   const [gameStatus, setGameStatus] = useState("idle");
@@ -20,6 +26,10 @@ function Game() {
   const [roundId, setRoundId] = useState(0);
   const [err, setErr] = useState("");
   const [activeBet, setActiveBet] = useState(0);
+
+  useEffect(()=>{
+    localStorage.setItem("treasureHuntBalance", String(balance));
+  },[balance]);
 
   function startGame() {
     if (gameStatus === "playing") {
@@ -71,7 +81,7 @@ function Game() {
   };
 
   const handleCashOut = () => {
-    setGameStatus("won");
+    setGameStatus("cashed");
     setBalance(balance + activeBet * currentMultiplier);
   };
 
@@ -90,7 +100,6 @@ function Game() {
       >
         Start Game
       </button>
-      {console.log(rows)}
 
       <StatusBar
         balance={balance}
