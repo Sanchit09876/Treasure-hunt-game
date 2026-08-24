@@ -23,7 +23,7 @@ const DifficultySelector = ({ setDifficulty, difficulty, gameStatus }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="inline-flex gap-2.5 mt-2.5 border rounded-lg p-4 mx-auto">
+      <div className="inline-flex gap-2.5 mt-2.5 border rounded-lg p-4 mx-auto bg-[#060D17] border-t-2 border-l border-r border-b-0 border-[#FDC932]">
         {Object.keys(difficultyConfig).map((name) => {
           const selectedDiff =
             name === difficulty ? buttonStyle[name].glow : "";

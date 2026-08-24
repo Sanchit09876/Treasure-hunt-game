@@ -7,6 +7,9 @@ import difficultyConfig from "../data/difficultyConfig";
 import BetInput from "./BetInput";
 import StatusBar from "./StatusBar";
 import DifficultySelector from "./DifficultySelector";
+import Header from "./Header";
+
+import { Play } from "lucide-react";
 
 function Game() {
   const [balance, setBalance] = useState(() => {
@@ -27,17 +30,21 @@ function Game() {
   const [err, setErr] = useState("");
   const [activeBet, setActiveBet] = useState(0);
 
-  useEffect(()=>{
+  useEffect(() => {
     localStorage.setItem("treasureHuntBalance", String(balance));
-  },[balance]);
+  }, [balance]);
 
   function startGame() {
     if (gameStatus === "playing") {
       setErr("Finish the round or Cash Out before starting new Round!");
       return;
     }
-    if (betAmount <= 0) {
+    if (betAmount === 0) {
       setErr("Please Bet Something!");
+      return;
+    }
+    if (betAmount < 0) {
+      setErr("Please Bet Positive Amount!");
       return;
     }
     if (betAmount > balance) {
@@ -54,9 +61,14 @@ function Game() {
     setCurrentMultiplier(1);
     setGameStatus("playing");
 
-    const newRows = Array.from({ length: difficultyConfig[difficulty].rowCount }, (_, i) => {
-      return { cards: generateRowCards(6, difficultyConfig[difficulty].skull) };
-    });
+    const newRows = Array.from(
+      { length: difficultyConfig[difficulty].rowCount },
+      (_, i) => {
+        return {
+          cards: generateRowCards(6, difficultyConfig[difficulty].skull),
+        };
+      },
+    );
     setRows(newRows);
   }
 
@@ -66,7 +78,7 @@ function Game() {
       setRowLocked(true);
       return;
     }
-    if (currentRow === difficultyConfig[difficulty].rowCount-1) {
+    if (currentRow === difficultyConfig[difficulty].rowCount - 1) {
       const finalMultiplier = getRowMultiplier(difficulty, currentRow);
       setCurrentMultiplier(finalMultiplier);
       setBalance(balance + activeBet * finalMultiplier);
@@ -87,19 +99,33 @@ function Game() {
 
   return (
     <div>
+      <Header />
       <DifficultySelector
         difficulty={difficulty}
         setDifficulty={setDifficulty}
         gameStatus={gameStatus}
       />
-      <button
-        onClick={() => {
-          setRowLocked(false);
-          startGame();
-        }}
-      >
-        Start Game
-      </button>
+
+      <div className="flex justify-center my-5">
+        <div className="inline-flex w-95 justify-around items-center border p-3 bg-[#060D17] rounded-lg border-t-2 border-l border-r border-b-0 border-[#FDC932]">
+          <BetInput
+            betAmount={betAmount}
+            setBetAmount={setBetAmount}
+            gameStatus={gameStatus}
+          />
+
+          <button
+            onClick={() => {
+              setRowLocked(false);
+              startGame();
+            }}
+            className="p-2 rounded-lg flex gap-2 bg-[#FDC932] font-bold text-[#4E2705]"
+          >
+            <Play fill="#461D00" strokeWidth={0} />
+            Start Game
+          </button>
+        </div>
+      </div>
 
       <StatusBar
         balance={balance}
@@ -110,15 +136,10 @@ function Game() {
         currentRow={currentRow}
       />
 
-      <BetInput
-        betAmount={betAmount}
-        setBetAmount={setBetAmount}
-        gameStatus={gameStatus}
-      />
-
       {err && <p>{err}</p>}
 
       {rows.map((row, index) => {
+        const rowMultiplier = getRowMultiplier(difficulty, index);
         return (
           <CardRow
             key={`${roundId}-${index}`}
@@ -128,6 +149,7 @@ function Game() {
             rowLocked={rowLocked}
             roundId={roundId}
             gameStatus={gameStatus}
+            rowMultiplier={rowMultiplier}
           />
         );
       })}

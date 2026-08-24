@@ -1,5 +1,9 @@
 import React from "react";
 import { getRowMultiplier } from "../utils/gameLogic";
+import { WalletCards } from "lucide-react";
+import { CircleDollarSign } from "lucide-react";
+import { TrendingUp } from "lucide-react";
+import { BanknoteArrowDown } from "lucide-react";
 
 const StatusBar = ({
   balance,
@@ -9,25 +13,40 @@ const StatusBar = ({
   currentRow,
   activeBet,
 }) => {
-  const previewMultiplier = getRowMultiplier(difficulty, currentRow);
+  // const previewMultiplier = getRowMultiplier(difficulty, currentRow);
   return (
     <div className="flex justify-center">
-      <div className="inline-flex gap-5 border p-2 rounded-lg">
-        <div className="flex flex-col items-center">
-          <p>BALANCE</p>
-          <p>${balance.toFixed(2)}</p>
+      <div className="inline-flex gap-5 border p-2 rounded-lg bg-[#060D17] border-t-2 border-l border-r border-b-0 border-[#FDC932]">
+        <div className="flex items-center gap-2">
+          <WalletCards stroke="#FCC732" size={30}/>
+          <div className="flex flex-col items-center">
+          <p className="text-[14px] font-[Barlow_Condensed] text-gray-500">BALANCE</p>
+          <p className="font-bold text-[#FCC732]"><span className="text-[18px]">$</span>{balance.toFixed(2)}</p>
         </div>
-        <div className="flex flex-col items-center">
-          <p>BET AMOUNT</p>
-          <p>${activeBet.toFixed(2)}</p>
         </div>
-        <div className="flex flex-col items-center">
-          <p>CURRENT MULTIPLIER</p>
-          <p>{currentMultiplier}X</p>
+
+        <div className="flex items-center gap-2">
+          <CircleDollarSign stroke="#FCC732" size={30}/>
+          <div className="flex flex-col items-center">
+          <p className="text-[14px] font-[Barlow_Condensed] text-gray-500">BET AMOUNT</p>
+          <p className="font-bold text-[#FCC732]"><span className="text-[18px]">$</span>{activeBet.toFixed(2)}</p>
         </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <TrendingUp stroke="#FCC732" size={30}/>
         <div className="flex flex-col items-center">
-          <p>CURRENT PAYOUT</p>
-          <p>${(activeBet * currentMultiplier).toFixed(2)}</p>
+          <p className="text-[14px] font-[Barlow_Condensed] text-gray-500">CURRENT MULTIPLIER</p>
+          <p className="font-bold text-[#FCC732]">{currentMultiplier}X</p>
+        </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <BanknoteArrowDown stroke="#FCC732" size={30}/>
+        <div className="flex flex-col items-center">
+          <p className="text-[14px] font-[Barlow_Condensed] text-gray-500">CURRENT PAYOUT</p>
+          <p className="font-bold text-[#FCC732]"><span className="text-[18px]">$</span>{(activeBet * currentMultiplier).toFixed(2)}</p>
+        </div>
         </div>
 
         {/* <p>Current Difficulty: {difficulty}</p> */}
