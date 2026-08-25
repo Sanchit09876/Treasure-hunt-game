@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CardRow from "./CardRow";
 
 import { generateRowCards, getRowMultiplier } from "../utils/gameLogic";
@@ -12,6 +12,8 @@ import Header from "./Header";
 import { Play } from "lucide-react";
 import SpecularButton from "./SpecularButton";
 import ResultBanner from "./ResultBanner";
+
+import { BanknoteArrowDown } from "lucide-react";
 
 function Game() {
   const [balance, setBalance] = useState(() => {
@@ -35,6 +37,19 @@ function Game() {
   useEffect(() => {
     localStorage.setItem("treasureHuntBalance", String(balance));
   }, [balance]);
+
+  const rowRefs = useRef([]);
+  const topRef = useRef(null);
+
+  useEffect(() => {
+    const el = rowRefs.current[currentRow];
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [currentRow]);
 
   function startGame() {
     if (gameStatus === "playing") {
@@ -100,7 +115,7 @@ function Game() {
   };
 
   return (
-    <div>
+    <div ref={topRef}>
       <Header />
       <DifficultySelector
         difficulty={difficulty}
@@ -158,36 +173,52 @@ function Game() {
       />
 
       {err && <p>{err}</p>}
-
-      {rows.map((row, index) => {
-        const rowMultiplier = getRowMultiplier(difficulty, index);
-        return (
-          <CardRow
-            key={`${roundId}-${index}`}
-            cards={row.cards}
-            isActive={index === currentRow}
-            onCardFlip={handleCardFlip}
-            rowLocked={rowLocked}
-            roundId={roundId}
-            gameStatus={gameStatus}
-            rowMultiplier={rowMultiplier}
-          />
-        );
-      })}
-
-      <button
-        onClick={handleCashOut}
-        disabled={gameStatus !== "playing" || currentRow === 0}
-        className="text-white"
+      <div
+        className={`${gameStatus === "idle" ? "h-0" : "h-100"} overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden`}
       >
-        CashOut
-      </button>
-      <ResultBanner
-        gameStatus={gameStatus}
-        currentRow={currentRow}
-        activeBet={activeBet}
-        currentMultiplier={currentMultiplier}
-      />
+        {rows.map((row, index) => {
+          const rowMultiplier = getRowMultiplier(difficulty, index);
+          return (
+            <CardRow
+              key={`${roundId}-${index}`}
+              cards={row.cards}
+              isActive={index === currentRow}
+              onCardFlip={handleCardFlip}
+              rowLocked={rowLocked}
+              roundId={roundId}
+              gameStatus={gameStatus}
+              rowMultiplier={rowMultiplier}
+              rowNumber={index + 1}
+              ref={(el) => (rowRefs.current[index] = el)}
+            />
+          );
+        })}
+      </div>
+      <div className="flex justify-center items-center">
+        <div className="">
+          <button
+            onClick={handleCashOut}
+            disabled={gameStatus !== "playing" || currentRow === 0}
+            className="text-white px-8 py-2 border-2 border-[#1B6435] rounded-lg flex gap-3 items-center bg-linear-to-t from-[#00230B] to-[#126736] transition-transform duration-80 ease-in active:scale-95"
+          >
+            <BanknoteArrowDown size={30} stroke="#46ab4e" />
+            <div className="font-medium">
+              CASH OUT
+              {activeBet !== 0 && (
+                <p className="text-[#46ab4e] text-[18px] font-bold">
+                  ${(activeBet * currentMultiplier).toFixed(2)}
+                </p>
+              )}
+            </div>
+          </button>
+        </div>
+        <ResultBanner
+          gameStatus={gameStatus}
+          currentRow={currentRow}
+          activeBet={activeBet}
+          currentMultiplier={currentMultiplier}
+        />
+      </div>
     </div>
   );
 }
