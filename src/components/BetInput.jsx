@@ -12,7 +12,7 @@ const BetInput = ({ betAmount, setBetAmount, gameStatus }) => {
           step="1"
           disabled={gameStatus === "playing"}
           placeholder="10.00"
-          className="border border-yellow-300 rounded-lg p-1 text-center text-yellow-500 font-medium placeholder:text-center placeholder:text-gray-400"
+          className="border border-yellow-300 rounded-lg p-1 text-center text-yellow-500 font-medium placeholder:text-center placeholder:text-gray-400 focus:ring-0 focus:outline-none"
         />
       </div>
     </div>

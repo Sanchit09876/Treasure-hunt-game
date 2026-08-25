@@ -4,7 +4,7 @@ import Card from "./components/Card";
 
 const App = () => {
   return (
-    <div className="bg-[#01060F] h-screen">
+    <div className="bg-linear-to-t from-[#060D17] to-[#0e1f3d] min-h-screen h-auto">
       <Game />
     </div>
   );

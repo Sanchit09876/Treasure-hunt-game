@@ -10,6 +10,8 @@ import DifficultySelector from "./DifficultySelector";
 import Header from "./Header";
 
 import { Play } from "lucide-react";
+import SpecularButton from "./SpecularButton";
+import ResultBanner from "./ResultBanner";
 
 function Game() {
   const [balance, setBalance] = useState(() => {
@@ -107,24 +109,43 @@ function Game() {
       />
 
       <div className="flex justify-center my-5">
-        <div className="inline-flex w-95 justify-around items-center border p-3 bg-[#060D17] rounded-lg border-t-2 border-l border-r border-b-0 border-[#FDC932]">
-          <BetInput
-            betAmount={betAmount}
-            setBetAmount={setBetAmount}
-            gameStatus={gameStatus}
-          />
+        <SpecularButton
+          size="sm"
+          radius={8}
+          tint="#ffffff"
+          tintOpacity={0}
+          blur={0}
+          textColor="#f5f5f5"
+          lineColor="#ffcd00"
+          baseColor="#000000"
+          intensity={1.35}
+          shineSize={25}
+          shineFade={40}
+          thickness={1.5}
+          speed={1.35}
+          followMouse={false}
+          proximity={250}
+          autoAnimate={true}
+        >
+          <div className="inline-flex w-95 justify-around items-center p-3 bg-linear-to-t from-[#060D17] to-[#091529] rounded-lg ">
+            <BetInput
+              betAmount={betAmount}
+              setBetAmount={setBetAmount}
+              gameStatus={gameStatus}
+            />
 
-          <button
-            onClick={() => {
-              setRowLocked(false);
-              startGame();
-            }}
-            className="p-2 rounded-lg flex gap-2 bg-[#FDC932] font-bold text-[#4E2705]"
-          >
-            <Play fill="#461D00" strokeWidth={0} />
-            Start Game
-          </button>
-        </div>
+            <button
+              onClick={() => {
+                setRowLocked(false);
+                startGame();
+              }}
+              className="p-2 rounded-lg flex items-center gap-2 bg-[#FDC932] font-bold text-[#4E2705] hover:bg-linear-to-t from-[#ddb12d] to-[#FDC932] transition-transform duration-80 ease-in active:scale-95"
+            >
+              <Play fill="#461D00" strokeWidth={0} />
+              Start Game
+            </button>
+          </div>
+        </SpecularButton>
       </div>
 
       <StatusBar
@@ -157,9 +178,16 @@ function Game() {
       <button
         onClick={handleCashOut}
         disabled={gameStatus !== "playing" || currentRow === 0}
+        className="text-white"
       >
         CashOut
       </button>
+      <ResultBanner
+        gameStatus={gameStatus}
+        currentRow={currentRow}
+        activeBet={activeBet}
+        currentMultiplier={currentMultiplier}
+      />
     </div>
   );
 }

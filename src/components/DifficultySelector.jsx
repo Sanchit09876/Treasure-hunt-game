@@ -1,5 +1,6 @@
 import React from "react";
 import difficultyConfig from "../data/difficultyConfig";
+import SpecularButton from "./SpecularButton";
 
 const DifficultySelector = ({ setDifficulty, difficulty, gameStatus }) => {
   const buttonStyle = {
@@ -23,22 +24,41 @@ const DifficultySelector = ({ setDifficulty, difficulty, gameStatus }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="inline-flex gap-2.5 mt-2.5 border rounded-lg p-4 mx-auto bg-[#060D17] border-t-2 border-l border-r border-b-0 border-[#FDC932]">
-        {Object.keys(difficultyConfig).map((name) => {
-          const selectedDiff =
-            name === difficulty ? buttonStyle[name].glow : "";
-          return (
-            <button
-              key={name}
-              onClick={() => setDifficulty(name)}
-              disabled={gameStatus === "playing"}
-              className={`p-1 w-20 border rounded-2xl font-medium ${buttonStyle[name].base} ${selectedDiff}`}
-            >
-              {name}
-            </button>
-          );
-        })}
-      </div>
+      <SpecularButton
+        size="sm"
+        radius={8}
+        tint="#ffffff"
+        tintOpacity={0}
+        blur={0}
+        textColor="#f5f5f5"
+        lineColor="#ffcd00"
+        baseColor="#000000"
+        intensity={1.35}
+        shineSize={25}
+        shineFade={40}
+        thickness={1.5}
+        speed={1.35}
+        followMouse={false}
+        proximity={250}
+        autoAnimate={true}
+      >
+        <div className="inline-flex gap-2.5 rounded-lg p-4 mx-auto bg-linear-to-t from-[#060D17] to-[#091529]">
+          {Object.keys(difficultyConfig).map((name) => {
+            const selectedDiff =
+              name === difficulty ? buttonStyle[name].glow : "";
+            return (
+              <button
+                key={name}
+                onClick={() => setDifficulty(name)}
+                disabled={gameStatus === "playing"}
+                className={`p-1 w-20 border rounded-2xl font-medium ${buttonStyle[name].base} ${selectedDiff} transition-transform duration-80 ease-in active:scale-95`}
+              >
+                {name}
+              </button>
+            );
+          })}
+        </div>
+      </SpecularButton>
     </div>
   );
 };
