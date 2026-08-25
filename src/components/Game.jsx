@@ -117,50 +117,53 @@ function Game() {
   return (
     <div ref={topRef}>
       <Header />
-      <DifficultySelector
-        difficulty={difficulty}
-        setDifficulty={setDifficulty}
-        gameStatus={gameStatus}
-      />
 
-      <div className="flex justify-center my-5">
-        <SpecularButton
-          size="sm"
-          radius={8}
-          tint="#ffffff"
-          tintOpacity={0}
-          blur={0}
-          textColor="#f5f5f5"
-          lineColor="#ffcd00"
-          baseColor="#000000"
-          intensity={1.35}
-          shineSize={25}
-          shineFade={40}
-          thickness={1.5}
-          speed={1.35}
-          followMouse={false}
-          proximity={250}
-          autoAnimate={true}
-        >
-          <div className="inline-flex w-95 justify-around items-center p-3 bg-linear-to-t from-[#060D17] to-[#091529] rounded-lg ">
-            <BetInput
-              betAmount={betAmount}
-              setBetAmount={setBetAmount}
-              gameStatus={gameStatus}
-            />
+      <div className="flex justify-center gap-5">
+        <DifficultySelector
+          difficulty={difficulty}
+          setDifficulty={setDifficulty}
+          gameStatus={gameStatus}
+        />
 
-            <button
-              onClick={() => {
-                setRowLocked(false);
-                startGame();
-              }}
-              className="p-2 rounded-lg flex items-center gap-2 bg-[#FDC932] font-bold text-[#4E2705] hover:bg-linear-to-t from-[#ddb12d] to-[#FDC932] transition-transform duration-80 ease-in active:scale-95"
-            >
-              <Play fill="#461D00" strokeWidth={0} />
-              Start Game
-            </button>
-          </div>
-        </SpecularButton>
+        <div className="flex justify-center my-5">
+          <SpecularButton
+            size="sm"
+            radius={8}
+            tint="#ffffff"
+            tintOpacity={0}
+            blur={0}
+            textColor="#f5f5f5"
+            lineColor="#ffcd00"
+            baseColor="#000000"
+            intensity={1.35}
+            shineSize={25}
+            shineFade={40}
+            thickness={1.5}
+            speed={1.35}
+            followMouse={false}
+            proximity={250}
+            autoAnimate={true}
+          >
+            <div className="inline-flex w-95 justify-around items-center p-3 bg-linear-to-t from-[#060D17] to-[#091529] rounded-lg ">
+              <BetInput
+                betAmount={betAmount}
+                setBetAmount={setBetAmount}
+                gameStatus={gameStatus}
+              />
+
+              <button
+                onClick={() => {
+                  setRowLocked(false);
+                  startGame();
+                }}
+                className="p-2 rounded-lg flex items-center gap-2 bg-[#FDC932] font-bold text-[#4E2705] hover:bg-linear-to-t from-[#ddb12d] to-[#FDC932] transition-transform duration-80 ease-in active:scale-95"
+              >
+                <Play fill="#461D00" strokeWidth={0} />
+                Start Game
+              </button>
+            </div>
+          </SpecularButton>
+        </div>
       </div>
 
       <StatusBar
@@ -174,7 +177,7 @@ function Game() {
 
       {err && <p>{err}</p>}
       <div
-        className={`${gameStatus === "idle" ? "h-0" : "h-100"} overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden`}
+        className={`${gameStatus === "idle" ? "h-0" : "h-95"} pt-5 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden`}
       >
         {rows.map((row, index) => {
           const rowMultiplier = getRowMultiplier(difficulty, index);
@@ -189,29 +192,15 @@ function Game() {
               gameStatus={gameStatus}
               rowMultiplier={rowMultiplier}
               rowNumber={index + 1}
+              onCashOut={handleCashOut}
+              currentRow={currentRow}
+              activeBet={activeBet}
+              currentMultiplier={currentMultiplier}
               ref={(el) => (rowRefs.current[index] = el)}
             />
           );
         })}
       </div>
-      <div className="flex justify-center items-center">
-        <div className="">
-          <button
-            onClick={handleCashOut}
-            disabled={gameStatus !== "playing" || currentRow === 0}
-            className="text-white px-8 py-2 border-2 border-[#1B6435] rounded-lg flex gap-3 items-center bg-linear-to-t from-[#00230B] to-[#126736] transition-transform duration-80 ease-in active:scale-95"
-          >
-            <BanknoteArrowDown size={30} stroke="#46ab4e" />
-            <div className="font-medium">
-              CASH OUT
-              {activeBet !== 0 && (
-                <p className="text-[#46ab4e] text-[18px] font-bold">
-                  ${(activeBet * currentMultiplier).toFixed(2)}
-                </p>
-              )}
-            </div>
-          </button>
-        </div>
         <ResultBanner
           gameStatus={gameStatus}
           currentRow={currentRow}
@@ -219,7 +208,6 @@ function Game() {
           currentMultiplier={currentMultiplier}
         />
       </div>
-    </div>
   );
 }
 
