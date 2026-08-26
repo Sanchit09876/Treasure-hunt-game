@@ -52,7 +52,7 @@ const CardRow = forwardRef(
               className={`${isDisabled ? "bg-gray-500" : "bg-linear-to-t from-[#044017] to-[#158845] border-2 border-[#1B6435]"} text-white px-6 py-2 rounded-lg flex gap-3 items-center  transition-transform duration-80 ease-in active:scale-95`}
             >
               <div>
-              <BanknoteArrowDown size={30} stroke="#46ab4e" />
+              <BanknoteArrowDown size={30} stroke={isDisabled ? "#9ca3af" : "#46ab4e"}/>
               </div>
               <div>
               CASH OUT

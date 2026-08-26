@@ -34,13 +34,13 @@ function Game() {
   const [roundId, setRoundId] = useState(0);
   const [err, setErr] = useState("");
   const [activeBet, setActiveBet] = useState(0);
+  const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("treasureHuntBalance", String(balance));
   }, [balance]);
 
   const rowRefs = useRef([]);
-  const topRef = useRef(null);
 
   useEffect(() => {
     const el = rowRefs.current[currentRow];
@@ -55,7 +55,24 @@ function Game() {
   useEffect(() => {
     if (!err) return;
     const timer = setTimeout(() => setErr(""), 3000);
+    return () => clearTimeout(timer);
   }, [err]);
+
+  useEffect(() => {
+    if (
+      gameStatus === "won" ||
+      gameStatus === "lost" ||
+      gameStatus === "cashed"
+    ) {
+      const showTimer = setTimeout(() => setShowResult(true), 300);
+      const hideTimer = setTimeout(() => setShowResult(false), 3000);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+    setShowResult(false);
+  }, [gameStatus]);
 
   function startGame() {
     if (gameStatus === "playing") {
@@ -121,7 +138,7 @@ function Game() {
   };
 
   return (
-    <div ref={topRef}>
+    <div>
       <Header />
 
       <div className="flex justify-center gap-5">
@@ -192,7 +209,8 @@ function Game() {
           />
         </div>
         <div
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${gameStatus === "idle" ? "h-0" : "h-95"} pt-5 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden`}
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${gameStatus === "idle" ? "h-0" : "h-95"} pt-5 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden 
+          transition-[filter] duration-300 ease-in  ${showResult ? "blur-sm" : "blur-0"}`}
         >
           {rows.map((row, index) => {
             const rowMultiplier = getRowMultiplier(difficulty, index);
@@ -216,13 +234,14 @@ function Game() {
             );
           })}
         </div>
+        <ResultBanner
+          gameStatus={gameStatus}
+          currentRow={currentRow}
+          activeBet={activeBet}
+          currentMultiplier={currentMultiplier}
+          visible={showResult}
+        />
       </div>
-      <ResultBanner
-        gameStatus={gameStatus}
-        currentRow={currentRow}
-        activeBet={activeBet}
-        currentMultiplier={currentMultiplier}
-      />
     </div>
   );
 }

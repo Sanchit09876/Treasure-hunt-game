@@ -9,19 +9,27 @@ const ResultBanner = ({
   currentRow,
   activeBet,
   currentMultiplier,
+  visible,
 }) => {
   const winText = "YOU WIN!";
   const lossText = "YOU LOSE!";
   const cashedText = "CASHED OUT!";
   return (
-    <div className="flex justify-center">
+    // <div className="flex justify-center">
+    <div
+      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-400 flex items-center justify-center pointer-events-none transition-all duration-500 ease-out ${
+        visible
+          ? "opacity-100 translate-y-[-50%]"
+          : "opacity-0 translate-y-[calc(-50%+10rem)]"
+      }`}
+    >
       {gameStatus === "won" ||
       gameStatus === "lost" ||
       gameStatus === "cashed" ? (
         <div className="p-2 ">
           {/* Win State */}
           {gameStatus === "won" && (
-            <div className="flex items-center gap-1.5 rounded-lg px-6 py-1 bg-linear-to-t from-green-500 from-5% to-[#060D17] to-60% border-t-2 border-green-500 transition-colors duration-300 ease-in hover:from-[#060D17] hover:from-40% hover:to-green-500 hover:to-100% hover:border-b-2 hover:border-green-500">
+            <div className="flex items-center gap-1.5 rounded-lg px-6 py-1 bg-linear-to-t from-green-500 from-5% to-[#060D17] to-60% border-t-2 border-green-500">
               <div className="border p-2 rounded-lg bg-green-400">
                 <img src={trophy} className="h-10" />
               </div>
@@ -37,7 +45,7 @@ const ResultBanner = ({
 
           {/* Lost State */}
           {gameStatus === "lost" && (
-            <div className="flex items-center gap-1.5 rounded-lg px-6 py-1 bg-linear-to-t from-red-900 from-5% to-[#060D17] to-60% border-t-2 border-red-900 transition-colors duration-300 ease-in hover:from-[#060D17] hover:from-40% hover:to-red-900 hover:to-100% hover:border-b-2 hover:border-red-900">
+            <div className="flex items-center gap-1.5 rounded-lg px-6 py-1 bg-linear-to-t from-red-900 from-5% to-[#060D17] to-60% border-t-2 border-red-900">
               <div className="p-2 rounded-lg bg-red-600">
                 <img src={skull} className="h-10" />
               </div>
@@ -53,14 +61,16 @@ const ResultBanner = ({
 
           {/* Cashed Out State */}
           {gameStatus === "cashed" && (
-            <div className="flex items-center gap-1.5 rounded-lg px-6 py-1 bg-linear-to-t from-yellow-200 from-5% to-[#060D17] to-60% border-t-2 border-yellow-200 transition-colors duration-300 ease-in hover:from-[#060D17] hover:from-40% hover:to-yellow-900 hover:to-100% hover:border-b-2 hover:border-yellow-200">
+            <div className="flex items-center gap-1.5 rounded-lg px-6 py-1 bg-linear-to-t from-yellow-200 from-5% to-[#060D17] to-60% border-t-2 border-yellow-200">
               <div className="p-2 rounded-lg bg-[#FDC700]">
                 <img src={goldCoins} className="h-10" />
               </div>
               <div className="flex flex-col items-center text-yellow-500">
                 <p className="font-bold">{cashedText}</p>
                 <p>Cashed Out at {currentMultiplier}x</p>
-                <p className="font-medium text-[18px] text-green-900">+${(currentMultiplier * activeBet).toFixed(2)}</p>
+                <p className="font-medium text-[18px] text-green-900">
+                  +${(currentMultiplier * activeBet).toFixed(2)}
+                </p>
               </div>
             </div>
           )}
