@@ -13,7 +13,7 @@ const Card = ({ type, isActive, onCardFlip, rowLocked, gameStatus }) => {
   return (
     <div>
       <div
-        className={`h-23 w-18 rounded-lg flex justify-center items-center ${flipped ? revealBg : "bg-[#13181F]"} transition-transform ${flipped ? "transform-[rotateY(180deg)]" : ""}`}
+        className={`h-23 w-18 rounded-lg flex justify-center items-center ${flipped ? revealBg : "bg-[#13181F]"} transition-transform ${flipped ? "transform-[rotateY(180deg)]" : ""} hover:cursor-help`}
         onClick={() => {
           if (!isActive || rowLocked || gameStatus !== "playing") {
             return;

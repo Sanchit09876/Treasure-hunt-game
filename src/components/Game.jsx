@@ -8,12 +8,13 @@ import BetInput from "./BetInput";
 import StatusBar from "./StatusBar";
 import DifficultySelector from "./DifficultySelector";
 import Header from "./Header";
+import ErrorBanner from "./ErrorBanner";
 
 import { Play } from "lucide-react";
 import SpecularButton from "./SpecularButton";
 import ResultBanner from "./ResultBanner";
 
-import { BanknoteArrowDown } from "lucide-react";
+import Border from "../assets/border.png";
 
 function Game() {
   const [balance, setBalance] = useState(() => {
@@ -51,21 +52,26 @@ function Game() {
     }
   }, [currentRow]);
 
+  useEffect(() => {
+    if (!err) return;
+    const timer = setTimeout(() => setErr(""), 3000);
+  }, [err]);
+
   function startGame() {
     if (gameStatus === "playing") {
-      setErr("Finish the round or Cash Out before starting new Round!");
+      setErr("FINISH THE ROUND OR CASH OUT FIRST!");
       return;
     }
     if (betAmount === 0) {
-      setErr("Please Bet Something!");
+      setErr("PLEASE BET SOMETHING!");
       return;
     }
     if (betAmount < 0) {
-      setErr("Please Bet Positive Amount!");
+      setErr("PLEASE BET POSITIVE AMOUNT!");
       return;
     }
     if (betAmount > balance) {
-      setErr("Not Enough Amount in Your balance!");
+      setErr("NOT ENOUGH BALANCE IN YOUR ACCOUNT!");
       return;
     }
     setErr("");
@@ -175,39 +181,49 @@ function Game() {
         currentRow={currentRow}
       />
 
-      {err && <p>{err}</p>}
-      <div
-        className={`${gameStatus === "idle" ? "h-0" : "h-95"} pt-5 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden`}
-      >
-        {rows.map((row, index) => {
-          const rowMultiplier = getRowMultiplier(difficulty, index);
-          return (
-            <CardRow
-              key={`${roundId}-${index}`}
-              cards={row.cards}
-              isActive={index === currentRow}
-              onCardFlip={handleCardFlip}
-              rowLocked={rowLocked}
-              roundId={roundId}
-              gameStatus={gameStatus}
-              rowMultiplier={rowMultiplier}
-              rowNumber={index + 1}
-              onCashOut={handleCashOut}
-              currentRow={currentRow}
-              activeBet={activeBet}
-              currentMultiplier={currentMultiplier}
-              ref={(el) => (rowRefs.current[index] = el)}
-            />
-          );
-        })}
+      <div className="mt-4">{err && <ErrorBanner err={err} />}</div>
+
+      <div className="relative flex justify-center">
+        <div className={`relative z-100 pointer-events-none`}>
+          <img
+            src={Border}
+            alt=""
+            className={`${gameStatus === "idle" ? "h-0" : "h-110"} w-205 `}
+          />
+        </div>
+        <div
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${gameStatus === "idle" ? "h-0" : "h-95"} pt-5 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden`}
+        >
+          {rows.map((row, index) => {
+            const rowMultiplier = getRowMultiplier(difficulty, index);
+            return (
+              <CardRow
+                key={`${roundId}-${index}`}
+                cards={row.cards}
+                isActive={index === currentRow}
+                onCardFlip={handleCardFlip}
+                rowLocked={rowLocked}
+                roundId={roundId}
+                gameStatus={gameStatus}
+                rowMultiplier={rowMultiplier}
+                rowNumber={index + 1}
+                onCashOut={handleCashOut}
+                currentRow={currentRow}
+                activeBet={activeBet}
+                currentMultiplier={currentMultiplier}
+                ref={(el) => (rowRefs.current[index] = el)}
+              />
+            );
+          })}
+        </div>
       </div>
-        <ResultBanner
-          gameStatus={gameStatus}
-          currentRow={currentRow}
-          activeBet={activeBet}
-          currentMultiplier={currentMultiplier}
-        />
-      </div>
+      <ResultBanner
+        gameStatus={gameStatus}
+        currentRow={currentRow}
+        activeBet={activeBet}
+        currentMultiplier={currentMultiplier}
+      />
+    </div>
   );
 }
 

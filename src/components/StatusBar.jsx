@@ -36,7 +36,7 @@ const StatusBar = ({
         autoAnimate={true}
       >
         <div className="inline-flex gap-5 px-2 py-3 rounded-lg bg-linear-to-t from-[#060D17] to-[#091529] ">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pr-6 border-r border-[#1b2a43]">
             <WalletCards stroke="#FCC732" size={30} />
             <div className="flex flex-col items-center">
               <p className="text-[14px] font-[Barlow_Condensed] text-gray-500 mb-2">
@@ -49,7 +49,7 @@ const StatusBar = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pr-6 border-r border-[#1b2a43]">
             <CircleDollarSign stroke="#FCC732" size={30} />
             <div className="flex flex-col items-center">
               <p className="text-[14px] font-[Barlow_Condensed] text-gray-500 mb-2">
@@ -62,7 +62,7 @@ const StatusBar = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pr-6 border-r border-[#1b2a43]">
             <TrendingUp stroke="#FCC732" size={30} />
             <div className="flex flex-col items-center">
               <p className="text-[14px] font-[Barlow_Condensed] text-gray-500 mb-2">
