@@ -20,6 +20,7 @@ import bgMusic from "../assets/game_music.mp3";
 import cardFlipSound from "../assets/card_flip_soundEffect.mp3";
 import gameOverSound from "../assets/gameOver_soundEffect.mp3";
 import winSound from "../assets/win_soundEffect.mp3";
+import cashoutSound from "../assets/cashout_soundEffect.mp3";
 
 function useBackgroundMusic(volume) {
   const musicRef = useRef(null);
@@ -88,6 +89,22 @@ function useWinSound(volume) {
   return winSoundRef;
 }
 
+function useCashoutSound(volume) {
+  const cashOutRef = useRef(null);
+
+  useEffect(() => {
+    const CashoutSoundEffect = new Audio(cashoutSound);
+    CashoutSoundEffect.loop = false;
+    CashoutSoundEffect.volume = volume;
+    cashOutRef.current = CashoutSoundEffect;
+    return () => {
+      CashoutSoundEffect.pause();
+      CashoutSoundEffect.src = "";
+    };
+  }, []);
+  return cashOutRef;
+}
+
 function Game() {
   const [balance, setBalance] = useState(() => {
     const storedBalance = localStorage.getItem("treasureHuntBalance");
@@ -113,6 +130,7 @@ function Game() {
   const flipSoundRef = useCardFlipSound(0.35);
   const gameOverRef = useGameOverSound(0.25);
   const winSoundRef = useWinSound(0.75);
+  const cashOutRef = useCashoutSound(0.75);
 
   useEffect(() => {
     localStorage.setItem("treasureHuntBalance", String(balance));
@@ -225,8 +243,8 @@ function Game() {
   const handleCashOut = () => {
     setGameStatus("cashed");
     setBalance(balance + activeBet * currentMultiplier);
-    winSoundRef.current.currentTime = 0;
-    winSoundRef.current.play().catch(() => {});
+    cashOutRef.current.currentTime = 0;
+    cashOutRef.current.play().catch(() => {});
   };
 
   return (
