@@ -16,6 +16,78 @@ import ResultBanner from "./ResultBanner";
 
 import Border from "../assets/border.png";
 
+import bgMusic from "../assets/game_music.mp3";
+import cardFlipSound from "../assets/card_flip_soundEffect.mp3";
+import gameOverSound from "../assets/gameOver_soundEffect.mp3";
+import winSound from "../assets/win_soundEffect.mp3";
+
+function useBackgroundMusic(volume) {
+  const musicRef = useRef(null);
+
+  useEffect(() => {
+    const music = new Audio(bgMusic);
+    music.loop = true;
+    music.volume = volume;
+    musicRef.current = music;
+
+    return () => {
+      music.pause();
+      music.src = "";
+    };
+  }, []);
+  return musicRef;
+}
+
+function useCardFlipSound(volume) {
+  const flipSoundRef = useRef(null);
+
+  useEffect(() => {
+    const cardFlip = new Audio(cardFlipSound);
+    cardFlip.loop = false;
+    cardFlip.volume = volume;
+    flipSoundRef.current = cardFlip;
+
+    return () => {
+      cardFlip.pause();
+      cardFlip.src = "";
+    };
+  }, []);
+  return flipSoundRef;
+}
+
+function useGameOverSound(volume) {
+  const gameOverRef = useRef(null);
+
+  useEffect(() => {
+    const gameOver = new Audio(gameOverSound);
+    gameOver.loop = false;
+    gameOver.volume = volume;
+    gameOverRef.current = gameOver;
+
+    return () => {
+      gameOver.pause();
+      gameOver.src = "";
+    };
+  }, []);
+  return gameOverRef;
+}
+
+function useWinSound(volume) {
+  const winSoundRef = useRef(null);
+
+  useEffect(() => {
+    const winSoundEffect = new Audio(winSound);
+    winSoundEffect.loop = false;
+    winSoundEffect.volume = volume;
+    winSoundRef.current = winSoundEffect;
+    return () => {
+      winSoundEffect.pause();
+      winSoundEffect.src = "";
+    };
+  }, []);
+  return winSoundRef;
+}
+
 function Game() {
   const [balance, setBalance] = useState(() => {
     const storedBalance = localStorage.getItem("treasureHuntBalance");
@@ -24,6 +96,7 @@ function Game() {
     }
     return Number(storedBalance);
   });
+
   const [betAmount, setBetAmount] = useState(0);
   const [difficulty, setDifficulty] = useState("easy");
   const [gameStatus, setGameStatus] = useState("idle");
@@ -35,6 +108,11 @@ function Game() {
   const [err, setErr] = useState("");
   const [activeBet, setActiveBet] = useState(0);
   const [showResult, setShowResult] = useState(false);
+
+  const musicRef = useBackgroundMusic(0.05);
+  const flipSoundRef = useCardFlipSound(0.35);
+  const gameOverRef = useGameOverSound(0.25);
+  const winSoundRef = useWinSound(0.75);
 
   useEffect(() => {
     localStorage.setItem("treasureHuntBalance", String(balance));
@@ -93,6 +171,10 @@ function Game() {
     }
     setErr("");
 
+    if (musicRef.current?.paused) {
+      musicRef.current.play().catch(() => {});
+    }
+
     setActiveBet(betAmount);
 
     setRoundId((prev) => prev + 1);
@@ -113,9 +195,15 @@ function Game() {
   }
 
   const handleCardFlip = (type) => {
+    if (flipSoundRef.current) {
+      flipSoundRef.current.currentTime = 0; //resets the sound to the very start
+      flipSoundRef.current.play().catch(() => {}); //.play() plays the sound while .catch() silently ignores autoplay-block errors
+    }
     if (type === "skull") {
       setGameStatus("lost");
       setRowLocked(true);
+      gameOverRef.current.currentTime = 0;
+      gameOverRef.current.play().catch(() => {});
       return;
     }
     if (currentRow === difficultyConfig[difficulty].rowCount - 1) {
@@ -124,6 +212,8 @@ function Game() {
       setBalance(balance + activeBet * finalMultiplier);
       setGameStatus("won");
       setRowLocked(true);
+      winSoundRef.current.currentTime = 0;
+      winSoundRef.current.play().catch(()=>{});
       return;
     }
     setRowLocked(true);
@@ -135,6 +225,8 @@ function Game() {
   const handleCashOut = () => {
     setGameStatus("cashed");
     setBalance(balance + activeBet * currentMultiplier);
+    winSoundRef.current.currentTime = 0;
+    winSoundRef.current.play().catch(() => {});
   };
 
   return (
