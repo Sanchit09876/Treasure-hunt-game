@@ -35,51 +35,51 @@ const StatusBar = ({
         proximity={250}
         autoAnimate={true}
       >
-        <div className="inline-flex gap-5 px-2 py-3 rounded-lg bg-linear-to-t from-[#060D17] to-[#091529] ">
-          <div className="flex items-center gap-2 pr-6 border-r border-[#1b2a43]">
-            <WalletCards stroke="#FCC732" size={30} />
+        <div className="grid grid-cols-2 juftify-center items-center sm:flex gap-5 px-2 py-3 rounded-lg bg-linear-to-t from-[#060D17] to-[#091529]">
+          <div className="flex justify-center items-center gap-2 pr-6 border-r border-[#1b2a43]">
+            <WalletCards stroke="#FCC732" className="size-[clamp(20px,5vw,28px)]" />
             <div className="flex flex-col items-center">
               <p className="text-[14px] font-[Barlow_Condensed] text-gray-500 mb-2">
                 BALANCE
               </p>
               <p className="font-bold text-[#FCC732]">
-                <span className="text-[18px]">$</span>
+                <span className="text-[16px]">$</span>
                 {balance.toFixed(2)}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 pr-6 border-r border-[#1b2a43]">
-            <CircleDollarSign stroke="#FCC732" size={30} />
+          <div className="flex justify-center items-center gap-2 pr-6 sm:border-r border-[#1b2a43]">
+            <CircleDollarSign stroke="#FCC732" className="size-[clamp(20px,5vw,28px)]" />
             <div className="flex flex-col items-center">
               <p className="text-[14px] font-[Barlow_Condensed] text-gray-500 mb-2">
                 BET AMOUNT
               </p>
               <p className="font-bold text-[#FCC732]">
-                <span className="text-[18px]">$</span>
+                <span className="text-[16px]">$</span>
                 {activeBet.toFixed(2)}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 pr-6 border-r border-[#1b2a43]">
-            <TrendingUp stroke="#FCC732" size={30} />
+          <div className="flex justify-center items-center gap-2 pr-6 border-r border-[#1b2a43]">
+            <TrendingUp stroke="#FCC732" className="size-[clamp(20px,5vw,28px)]" />
             <div className="flex flex-col items-center">
-              <p className="text-[14px] font-[Barlow_Condensed] text-gray-500 mb-2">
+              <p className="text-[14px] font-[Barlow_Condensed] text-gray-500 mb-2 max-w-15">
                 CURRENT MULTIPLIER
               </p>
               <p className="font-bold text-[#FCC732]">{currentMultiplier}X</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <BanknoteArrowDown stroke="#FCC732" size={30} />
+          <div className="flex justify-center items-center gap-2">
+            <BanknoteArrowDown stroke="#FCC732" className="size-[clamp(20px,5vw,28px)]" />
             <div className="flex flex-col items-center">
-              <p className="text-[14px] font-[Barlow_Condensed] text-gray-500 mb-2">
+              <p className="text-[14px] font-[Barlow_Condensed] text-gray-500 mb-2 max-w-15">
                 CURRENT PAYOUT
               </p>
               <p className="font-bold text-[#FCC732]">
-                <span className="text-[18px]">$</span>
+                <span className="text-[16px]">$</span>
                 {(activeBet * currentMultiplier).toFixed(2)}
               </p>
             </div>

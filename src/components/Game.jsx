@@ -251,14 +251,14 @@ function Game() {
     <div>
       <Header />
 
-      <div className="flex justify-center gap-5">
+      <div className="flex flex-col justify-center md:flex-row md:gap-4">
         <DifficultySelector
           difficulty={difficulty}
           setDifficulty={setDifficulty}
           gameStatus={gameStatus}
         />
 
-        <div className="flex justify-center my-5">
+        <div className="flex justify-center my-4">
           <SpecularButton
             size="sm"
             radius={8}
@@ -277,7 +277,7 @@ function Game() {
             proximity={250}
             autoAnimate={true}
           >
-            <div className="inline-flex w-95 justify-around items-center p-3 bg-linear-to-t from-[#060D17] to-[#091529] rounded-lg ">
+            <div className="flex flex-col sm:flex-row gap-4 justify-around items-center p-4 bg-linear-to-t from-[#060D17] to-[#091529] rounded-lg ">
               <BetInput
                 betAmount={betAmount}
                 setBetAmount={setBetAmount}
@@ -289,7 +289,7 @@ function Game() {
                   setRowLocked(false);
                   startGame();
                 }}
-                className="p-2 rounded-lg flex items-center gap-2 bg-[#FDC932] font-bold text-[#4E2705] hover:bg-linear-to-t from-[#ddb12d] to-[#FDC932] transition-transform duration-80 ease-in active:scale-95"
+                className="w-full py-1.5 sm:py-2 sm:px-2 rounded-lg flex justify-center items-center gap-2 bg-[#FDC932] font-bold text-[#4E2705] hover:bg-linear-to-t from-[#ddb12d] to-[#FDC932] transition-transform duration-80 ease-in active:scale-95"
               >
                 <Play fill="#461D00" strokeWidth={0} />
                 Start Game

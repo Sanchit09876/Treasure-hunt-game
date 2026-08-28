@@ -27,7 +27,7 @@ const DifficultySelector = ({ setDifficulty, difficulty, gameStatus }) => {
   };
 
   return (
-    <div className="flex justify-center items-center shrink-0">
+    <div className="flex justify-center items-center">
       <SpecularButton
         size="sm"
         radius={8}
@@ -46,7 +46,7 @@ const DifficultySelector = ({ setDifficulty, difficulty, gameStatus }) => {
         proximity={250}
         autoAnimate={true}
       >
-        <div className="inline-flex gap-2.5 rounded-lg p-5 bg-linear-to-t from-[#060D17] to-[#091529]">
+        <div className="grid grid-cols-2 sm:flex gap-3 rounded-lg p-5 bg-linear-to-t from-[#060D17] to-[#091529]">
           {Object.keys(difficultyConfig).map((name) => {
             const selectedDiff =
               name === difficulty ? `${buttonStyle[name].scale} ${buttonStyle[name].glow}` : "";
@@ -55,7 +55,7 @@ const DifficultySelector = ({ setDifficulty, difficulty, gameStatus }) => {
                 key={name}
                 onClick={() => setDifficulty(name)}
                 disabled={gameStatus === "playing"}
-                className={`p-1 w-20 border rounded-lg font-medium ${buttonStyle[name].base} ${selectedDiff} transition-transform duration-80 ease-in active:scale-95 text-transform: uppercase`}
+                className={`py-1 px-5 border rounded-lg font-medium ${buttonStyle[name].base} ${selectedDiff} transition-transform duration-80 ease-in active:scale-95 text-transform: uppercase`}
               >
                 {name}
               </button>
