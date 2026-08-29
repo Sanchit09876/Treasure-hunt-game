@@ -146,7 +146,7 @@ function Game() {
         block: "center",
       });
     }
-  }, [currentRow]);
+  }, [currentRow, roundId]);
 
   useEffect(() => {
     if (!err) return;
@@ -231,7 +231,7 @@ function Game() {
       setGameStatus("won");
       setRowLocked(true);
       winSoundRef.current.currentTime = 0;
-      winSoundRef.current.play().catch(()=>{});
+      winSoundRef.current.play().catch(() => {});
       return;
     }
     setRowLocked(true);
@@ -310,17 +310,17 @@ function Game() {
 
       <div className="mt-4">{err && <ErrorBanner err={err} />}</div>
 
-      <div className="relative flex justify-center">
-        <div className={`relative z-100 pointer-events-none`}>
+      <div className="relative flex justify-center overflow-hidden">
+        <div className={`relative inline-block z-100 pointer-events-none`}>
           <img
             src={Border}
             alt=""
-            className={`${gameStatus === "idle" ? "h-0" : "h-110"} w-205 `}
+            className={`${gameStatus === "idle" ? "h-0" : "h-[clamp(300px,90vw,440px)]"} sm:w-170 lg:w-200 hidden sm:block `}
           />
         </div>
         <div
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${gameStatus === "idle" ? "h-0" : "h-95"} pt-5 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden 
-          transition-[filter] duration-300 ease-in  ${showResult ? "blur-sm" : "blur-0"}`}
+          className={`sm:absolute sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 ${gameStatus === "idle" ? "h-0" : "h-59 sm:h-95"} pt-5 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden 
+          transition-[filter] duration-300 ease-in  ${showResult ? "blur-sm" : "blur-0"} sm:w-164 lg:w-177.5`}
         >
           {rows.map((row, index) => {
             const rowMultiplier = getRowMultiplier(difficulty, index);

@@ -55,7 +55,7 @@ const DifficultySelector = ({ setDifficulty, difficulty, gameStatus }) => {
                 key={name}
                 onClick={() => setDifficulty(name)}
                 disabled={gameStatus === "playing"}
-                className={`py-1 px-5 border rounded-lg font-medium ${buttonStyle[name].base} ${selectedDiff} transition-transform duration-80 ease-in active:scale-95 text-transform: uppercase`}
+                className={`py-1 px-5 sm:px-3 lg:px-5 border rounded-lg font-medium text-[13px] ${buttonStyle[name].base} ${selectedDiff} transition-transform duration-80 ease-in active:scale-95 text-transform: uppercase`}
               >
                 {name}
               </button>
