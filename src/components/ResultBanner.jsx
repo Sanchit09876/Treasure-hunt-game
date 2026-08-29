@@ -17,7 +17,7 @@ const ResultBanner = ({
   return (
     // <div className="flex justify-center">
     <div
-      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-400 flex items-center justify-center pointer-events-none transition-all duration-500 ease-out ${
+      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-400 flex items-center justify-center pointer-events-none transition-all duration-500 ease-out w-full px-2 sm:w-auto sm:px-0 ${
         visible
           ? "opacity-100 translate-y-[-50%]"
           : "opacity-0 translate-y-[calc(-50%+10rem)]"
