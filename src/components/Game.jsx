@@ -17,6 +17,7 @@ import ResultBanner from "./ResultBanner";
 import { CircleQuestionMark } from "lucide-react";
 
 import Border from "../assets/border.png";
+import BgImage from "../assets/background_image.png";
 
 import bgMusic from "../assets/game_music.mp3";
 import cardFlipSound from "../assets/card_flip_soundEffect.mp3";
@@ -252,124 +253,163 @@ function Game() {
 
   return (
     <div>
-      <Header />
-
-      <div className="flex flex-col justify-center md:flex-row md:gap-4">
-        <DifficultySelector
-          difficulty={difficulty}
-          setDifficulty={setDifficulty}
-          gameStatus={gameStatus}
-        />
-
-        <div className="flex justify-center my-4">
-          <SpecularButton
-            size="sm"
-            radius={8}
-            tint="#ffffff"
-            tintOpacity={0}
-            blur={0}
-            textColor="#f5f5f5"
-            lineColor="#ffcd00"
-            baseColor="#000000"
-            intensity={1.35}
-            shineSize={25}
-            shineFade={40}
-            thickness={1.5}
-            speed={1.35}
-            followMouse={false}
-            proximity={250}
-            autoAnimate={true}
-          >
-            <div className="flex flex-col sm:flex-row gap-4 justify-around items-center p-4 bg-linear-to-t from-[#060D17] to-[#091529] rounded-lg ">
-              <BetInput
-                betAmount={betAmount}
-                setBetAmount={setBetAmount}
-                gameStatus={gameStatus}
-              />
-
-              <button
-                onClick={() => {
-                  setRowLocked(false);
-                  startGame();
-                }}
-                className="w-full py-1.5 sm:py-2 sm:px-2 rounded-lg flex justify-center items-center gap-2 bg-[#FDC932] font-bold text-[#4E2705] hover:bg-linear-to-t from-[#ddb12d] to-[#FDC932] transition-transform duration-80 ease-in active:scale-95"
-              >
-                <Play fill="#461D00" strokeWidth={0} />
-                Start Game
-              </button>
-            </div>
-          </SpecularButton>
-        </div>
-      </div>
-
-      <StatusBar
-        balance={balance}
-        gameStatus={gameStatus}
-        activeBet={activeBet}
-        currentMultiplier={currentMultiplier}
-        difficulty={difficulty}
-        currentRow={currentRow}
+      <img
+        src={BgImage}
+        alt=""
+        className="fixed inset-0 w-full h-full object-cover z-0 pointer-events-none opacity-70"
       />
 
-      <div className="mt-4">{err && <ErrorBanner err={err} />}</div>
+    {gameStatus === "idle" && (
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-center hidden lg:flex lg:flex-col lg:items-center lg:gap-2">
+        <p className="text-[80px]">🗺️</p>
+        <p className="text-amber-300 font-bold text-3xl">Start Your Journey</p>
+        <p className="text-slate-400 text-2xl font-medium">Choose your Difficulty, place a Bet, and Start the Game to Begin</p>
+      </div>
+    )}
 
-      <div className="relative flex justify-center overflow-hidden">
-        <div className={`relative inline-block z-100 pointer-events-none`}>
-          <img
-            src={Border}
-            alt=""
-            className={`${gameStatus === "idle" ? "h-0" : "h-[clamp(300px,90vw,440px)]"} sm:w-170 lg:w-200 hidden sm:block `}
+      <div className="relative z-10">
+        <Header />
+
+        <div className="flex flex-col justify-center md:flex-row md:gap-4">
+          <DifficultySelector
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+            gameStatus={gameStatus}
           />
+
+          <div className="flex justify-center my-4">
+            <SpecularButton
+              size="sm"
+              radius={8}
+              tint="#ffffff"
+              tintOpacity={0}
+              blur={0}
+              textColor="#f5f5f5"
+              lineColor="#ffcd00"
+              baseColor="#000000"
+              intensity={1.35}
+              shineSize={25}
+              shineFade={40}
+              thickness={1.5}
+              speed={1.35}
+              followMouse={false}
+              proximity={250}
+              autoAnimate={true}
+            >
+              <div className="flex flex-col sm:flex-row gap-4 justify-around items-center p-4 bg-linear-to-t from-[#060D17] to-[#091529] rounded-lg ">
+                <BetInput
+                  betAmount={betAmount}
+                  setBetAmount={setBetAmount}
+                  gameStatus={gameStatus}
+                />
+
+                {/* <button
+                  onClick={() => {
+                    setRowLocked(false);
+                    startGame();
+                  }}
+                  className="w-full py-1.5 sm:py-2 sm:px-2 rounded-lg flex justify-center items-center gap-2 bg-[#FDC932] font-bold text-[#4E2705] hover:bg-linear-to-t from-[#ddb12d] to-[#FDC932] transition-transform duration-80 ease-in active:scale-95"
+                >
+                  <Play fill="#461D00" strokeWidth={0} />
+                  Start Game
+                </button> */}
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => {
+                    setRowLocked(false);
+                    startGame();
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setRowLocked(false);
+                      startGame();
+                    }
+                  }}
+                  className="w-full py-1.5 sm:py-2 sm:px-2 rounded-lg flex justify-center items-center gap-2 bg-[#FDC932] font-bold text-[#4E2705] hover:bg-linear-to-t from-[#ddb12d] to-[#FDC932] transition-transform duration-80 ease-in active:scale-95 cursor-pointer"
+                >
+                  <Play fill="#461D00" strokeWidth={0} />
+                  Start Game
+                </div>
+              </div>
+            </SpecularButton>
+          </div>
         </div>
-        <div
-          className={`sm:absolute sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 ${gameStatus === "idle" ? "h-0" : "h-59 sm:h-95"} pt-5 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden 
-          transition-[filter] duration-300 ease-in  ${showResult ? "blur-sm" : "blur-0"} sm:w-164 lg:w-177.5`}
-        >
-          {rows.map((row, index) => {
-            const rowMultiplier = getRowMultiplier(difficulty, index);
-            return (
-              <CardRow
-                key={`${roundId}-${index}`}
-                cards={row.cards}
-                isActive={index === currentRow}
-                onCardFlip={handleCardFlip}
-                rowLocked={rowLocked}
-                roundId={roundId}
-                gameStatus={gameStatus}
-                rowMultiplier={rowMultiplier}
-                rowNumber={index + 1}
-                onCashOut={handleCashOut}
-                currentRow={currentRow}
-                activeBet={activeBet}
-                currentMultiplier={currentMultiplier}
-                ref={(el) => (rowRefs.current[index] = el)}
-              />
-            );
-          })}
-        </div>
-        <ResultBanner
+
+        <StatusBar
+          balance={balance}
           gameStatus={gameStatus}
-          currentRow={currentRow}
           activeBet={activeBet}
           currentMultiplier={currentMultiplier}
-          visible={showResult}
+          difficulty={difficulty}
+          currentRow={currentRow}
         />
-      </div>
 
-      {/* Rules display block */}
-      <div
-        className="fixed bottom-4 left-4"
-        onClick={() => setHelpDisplay(!helpDisplay)}
-      >
-        <div className="flex flex-col gap-1 items-center">
-          <CircleQuestionMark stroke="#FCC732" />
+        <div className="mt-4">{err && <ErrorBanner err={err} />}</div>
 
-          <p className="text-amber-300">RULES</p>
+        <div className="relative flex justify-center overflow-hidden">
+          <div className={`relative inline-block z-100 pointer-events-none`}>
+            <img
+              src={Border}
+              alt=""
+              className={`${gameStatus === "idle" ? "h-0 w-0" : "h-[clamp(300px,90vw,440px)]"} sm:w-170 lg:w-200 hidden sm:block `}
+            />
+          </div>
+
+          <div
+            className={`sm:absolute sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 ${gameStatus === "idle" ? "h-0" : "h-59 sm:h-95"} pt-5 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden 
+          transition-[filter] duration-300 ease-in  ${showResult ? "blur-sm" : "blur-0"} sm:w-164 lg:w-180`}
+          >
+            {rows.map((row, index) => {
+              const rowMultiplier = getRowMultiplier(difficulty, index);
+              return (
+                <CardRow
+                  key={`${roundId}-${index}`}
+                  cards={row.cards}
+                  isActive={index === currentRow}
+                  onCardFlip={handleCardFlip}
+                  rowLocked={rowLocked}
+                  roundId={roundId}
+                  gameStatus={gameStatus}
+                  rowMultiplier={rowMultiplier}
+                  rowNumber={index + 1}
+                  onCashOut={handleCashOut}
+                  currentRow={currentRow}
+                  activeBet={activeBet}
+                  currentMultiplier={currentMultiplier}
+                  ref={(el) => (rowRefs.current[index] = el)}
+                />
+              );
+            })}
+          </div>
+          <ResultBanner
+            gameStatus={gameStatus}
+            currentRow={currentRow}
+            activeBet={activeBet}
+            currentMultiplier={currentMultiplier}
+            visible={showResult}
+          />
         </div>
-      </div>
 
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-100">
-        <HowToPlay helpDisplay={helpDisplay} setHelpDisplay={setHelpDisplay}/>
+        {/* Rules display block */}
+        <div
+          className="fixed bottom-18 md:bottom-30 left-4 lg:bottom-20"
+          onClick={() => setHelpDisplay(!helpDisplay)}
+        >
+          <div className="flex flex-col gap-1 items-center">
+            <CircleQuestionMark stroke="#FCC732" />
+
+            <p className="text-amber-300">RULES</p>
+          </div>
+        </div>
+
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-100">
+          <HowToPlay
+            helpDisplay={helpDisplay}
+            setHelpDisplay={setHelpDisplay}
+          />
+        </div>
       </div>
     </div>
   );
