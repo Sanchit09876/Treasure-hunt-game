@@ -9,10 +9,12 @@ import StatusBar from "./StatusBar";
 import DifficultySelector from "./DifficultySelector";
 import Header from "./Header";
 import ErrorBanner from "./ErrorBanner";
+import HowToPlay from "./HowToPlay";
 
 import { Play } from "lucide-react";
 import SpecularButton from "./SpecularButton";
 import ResultBanner from "./ResultBanner";
+import { CircleQuestionMark } from "lucide-react";
 
 import Border from "../assets/border.png";
 
@@ -125,6 +127,7 @@ function Game() {
   const [err, setErr] = useState("");
   const [activeBet, setActiveBet] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [helpDisplay, setHelpDisplay] = useState(false);
 
   const musicRef = useBackgroundMusic(0.05);
   const flipSoundRef = useCardFlipSound(0.35);
@@ -351,6 +354,22 @@ function Game() {
           currentMultiplier={currentMultiplier}
           visible={showResult}
         />
+      </div>
+
+      {/* Rules display block */}
+      <div
+        className="fixed bottom-4 left-4"
+        onClick={() => setHelpDisplay(!helpDisplay)}
+      >
+        <div className="flex flex-col gap-1 items-center">
+          <CircleQuestionMark stroke="#FCC732" />
+
+          <p className="text-amber-300">RULES</p>
+        </div>
+      </div>
+
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-100">
+        <HowToPlay helpDisplay={helpDisplay} setHelpDisplay={setHelpDisplay}/>
       </div>
     </div>
   );
