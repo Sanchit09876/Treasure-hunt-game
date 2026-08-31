@@ -25,7 +25,7 @@ const CardRow = forwardRef(
     return (
       <div ref={ref} className="flex justify-center w-full">
         <div
-          className={`flex items-center gap-1 sm:gap-2 px-1 sm:px-4 py-3 mb-1 rounded-lg overflow-x-auto max-w-full ${isActive ? "bg-yellow-200" : "bg-gray-500/70"}`}
+          className={`flex items-center gap-1 sm:gap-2 px-1 sm:px-4 py-3 mb-1 rounded-lg overflow-x-auto max-w-full scrollbar-none [&::-webkit-scrollbar]:hidden ${isActive ? "bg-yellow-200" : "bg-gray-500/70"}`}
           >
           <div
             className={`w-8 lg:w-15 ${isActive ? "text-yellow-600" : "text-gray-800"} flex flex-col items-center`}
