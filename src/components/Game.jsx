@@ -260,7 +260,7 @@ function Game() {
       />
 
     {gameStatus === "idle" && (
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 text-center hidden lg:flex lg:flex-col lg:items-center lg:gap-2">
+      <div className="absolute top-[55%] left-1/2 -translate-x-1/2 text-center hidden lg:flex lg:flex-col lg:items-center lg:gap-2">
         <p className="text-[80px]">🗺️</p>
         <p className="text-amber-300 font-bold text-3xl">Start Your Journey</p>
         <p className="text-slate-400 text-2xl font-medium">Choose your Difficulty, place a Bet, and Start the Game to Begin</p>
